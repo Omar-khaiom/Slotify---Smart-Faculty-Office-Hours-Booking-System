@@ -1,23 +1,92 @@
 {% extends "base.html" %}
+
+{% block page_title %}Welcome{% endblock %}
+
 {% block content %}
-<div class="p-4 bg-white rounded shadow-sm text-center">
-  <h1 class="mb-3">Welcome to Slotify</h1>
-  <p class="lead">Smart Faculty Office Hours Booking System</p>
-  <p class="text-muted">Simplifying office hour scheduling for students and faculty</p>
-  {% if user.is_authenticated %}
-    <div class="mt-4">
-      {% if user.is_faculty %}
-        <a href="/scheduling/faculty/dashboard/" class="btn btn-primary btn-lg">Go to Faculty Dashboard</a>
-      {% elif user.is_student %}
-        <a href="/scheduling/student/dashboard/" class="btn btn-primary btn-lg">Go to Student Dashboard</a>
+<section class="slotify-hero card border-0 mb-4">
+  <div>
+    <span class="slotify-eyebrow">Slotify Campus Scheduler</span>
+    <h1 class="slotify-hero-title">Plan office hours with clarity and momentum.</h1>
+    <p class="slotify-hero-copy">
+      Slotify gives students, faculty, and admins a real-time command center for campus availability. Publish high-impact sessions,
+      control capacity, and keep everyone aligned without the busywork.
+    </p>
+    <div class="slotify-hero-actions">
+      {% if user.is_authenticated %}
+        {% if user.is_faculty %}
+          <a href="{% url 'faculty_slot_create' %}" class="btn btn-primary btn-lg">Create a Slot</a>
+          <a href="{% url 'faculty_dashboard' %}" class="btn btn-outline-secondary btn-lg">Open Dashboard</a>
+        {% elif user.is_student %}
+          <a href="{% url 'faculty_list' %}" class="btn btn-primary btn-lg">Browse Faculty</a>
+          <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary btn-lg">My Dashboard</a>
+        {% else %}
+          <a href="{% url 'analytics_dashboard' %}" class="btn btn-primary btn-lg">View Analytics</a>
+          <a href="/admin/" class="btn btn-outline-secondary btn-lg">Go to Admin</a>
+        {% endif %}
       {% else %}
-        <a href="/admin/" class="btn btn-primary btn-lg">Admin Area</a>
+        <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Login to Book</a>
+        <a href="#how-it-works" class="btn btn-outline-secondary btn-lg">How Slotify Helps</a>
       {% endif %}
     </div>
-  {% else %}
-    <div class="mt-4">
-      <a href="/login/" class="btn btn-success btn-lg">Login to Get Started</a>
+  </div>
+  <div class="slotify-hero-visual">
+    <div class="slotify-hero-grid"></div>
+    <div class="slotify-hero-pulse"></div>
+  </div>
+</section>
+
+<section class="slotify-stats-grid mb-5" id="how-it-works">
+  <article class="slotify-stat-card">
+    <div class="slotify-stat-label">Students</div>
+    <div class="slotify-stat-value">Reserve with confidence</div>
+    <p class="slotify-stat-meta">Instant availability, overlap protection, and reminders that keep you ready.</p>
+  </article>
+  <article class="slotify-stat-card">
+    <div class="slotify-stat-label">Faculty</div>
+    <div class="slotify-stat-value">Control every slot</div>
+    <p class="slotify-stat-meta">Define capacity, locations, and agendas. Track attendee lists in seconds.</p>
+  </article>
+  <article class="slotify-stat-card">
+    <div class="slotify-stat-label">Admins</div>
+    <div class="slotify-stat-value">See the big picture</div>
+    <p class="slotify-stat-meta">Monitor peak hours, high-demand faculty, and campus trends with live analytics.</p>
+  </article>
+</section>
+
+<div class="row g-4 align-items-stretch">
+  <div class="col-lg-6">
+    <div class="card h-100 slotify-list-card">
+      <div class="card-body">
+        <h2 class="card-title h4 mb-3">Why campuses choose Slotify</h2>
+        <ul>
+          <li>Glassmorphic dashboards tuned for rapid decision-making.</li>
+          <li>Capacity-aware booking engine built on transactional guarantees.</li>
+          <li>Role-aware journeys that adapt to students, faculty, and admins.</li>
+          <li>Analytics endpoints to surface peak demand and engagement trends.</li>
+        </ul>
+      </div>
     </div>
-  {% endif %}
+  </div>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="card-title h4 mb-3">Getting started today</h2>
+        <div class="d-grid gap-3">
+          <div class="slotify-step-card">
+            <h3>1. Login</h3>
+            <p>Admins and faculty sign in via the secure login portal. New users can be added in Django Admin.</p>
+          </div>
+          <div class="slotify-step-card">
+            <h3>2. Publish office hours</h3>
+            <p>Faculty launch slots with time ranges, capacities, and locations directly from their dashboard.</p>
+          </div>
+          <div class="slotify-step-card">
+            <h3>3. Book in real time</h3>
+            <p>Students reserve the seats they need, receive confirmation, and manage visits from one timeline.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

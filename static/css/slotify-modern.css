@@ -1,0 +1,790 @@
+:root {
+  --slotify-night: #0b1026;
+  --slotify-ink: #121b3d;
+  --slotify-glass: rgba(16, 27, 58, 0.55);
+  --slotify-glass-strong: rgba(16, 27, 58, 0.75);
+  --slotify-azure: #4da3ff;
+  --slotify-lime: #48f9a6;
+  --slotify-violet: #7b6cff;
+  --slotify-text: #f5f8ff;
+  --slotify-muted: rgba(245, 248, 255, 0.68);
+  --slotify-border: rgba(255, 255, 255, 0.08);
+  --slotify-radius-lg: 24px;
+  --slotify-radius-md: 18px;
+  --slotify-shadow-xl: 0 24px 45px rgba(9, 17, 38, 0.35);
+  --slotify-shadow-sm: 0 8px 20px rgba(9, 17, 38, 0.28);
+  --slotify-gradient: linear-gradient(135deg, rgba(77, 163, 255, 0.9), rgba(72, 249, 166, 0.9));
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.slotify-body {
+  min-height: 100vh;
+  margin: 0;
+  background: radial-gradient(circle at 15% 20%, rgba(77, 163, 255, 0.18), transparent 55%),
+    radial-gradient(circle at 85% 30%, rgba(72, 249, 166, 0.18), transparent 50%),
+    linear-gradient(200deg, var(--slotify-night) 0%, #060b1c 100%);
+  color: var(--slotify-text);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-attachment: fixed;
+}
+
+.slotify-background {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.slotify-layout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 100vh;
+}
+
+.slotify-sidebar {
+  width: 280px;
+  background: var(--slotify-glass);
+  border-right: 1px solid var(--slotify-border);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  box-shadow: var(--slotify-shadow-sm);
+}
+
+.slotify-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.slotify-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: var(--slotify-night);
+  background: linear-gradient(135deg, var(--slotify-lime), var(--slotify-azure));
+  box-shadow: 0 10px 25px rgba(72, 249, 166, 0.35);
+}
+
+.slotify-word {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08rem;
+  font-size: 1.1rem;
+  color: var(--slotify-text);
+  text-transform: uppercase;
+}
+
+.slotify-nav {
+  flex: 1;
+}
+
+.slotify-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slotify-nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: var(--slotify-radius-md);
+  text-decoration: none;
+  color: var(--slotify-muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.slotify-nav-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.slotify-nav-link:hover {
+  color: var(--slotify-text);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateX(4px);
+}
+
+.slotify-nav-link:hover::after {
+  border-color: rgba(77, 163, 255, 0.3);
+}
+
+.slotify-nav-link.is-active {
+  background: rgba(77, 163, 255, 0.18);
+  color: var(--slotify-text);
+  box-shadow: inset 0 0 0 1px rgba(77, 163, 255, 0.25);
+}
+
+.slotify-sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--slotify-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slotify-user-chip {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.slotify-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(77, 163, 255, 0.28);
+  display: grid;
+  place-items: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--slotify-text);
+}
+
+.slotify-user-name {
+  font-weight: 600;
+  color: var(--slotify-text);
+}
+
+.slotify-user-role {
+  font-size: 0.78rem;
+  color: var(--slotify-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.slotify-logout {
+  color: var(--slotify-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.slotify-logout:hover {
+  color: var(--slotify-text);
+}
+
+.slotify-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.slotify-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 36px 12px;
+}
+
+.slotify-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.slotify-toggle::before,
+.slotify-toggle::after,
+.slotify-toggle span {
+  content: "";
+  position: absolute;
+  width: 55%;
+  height: 2px;
+  background: var(--slotify-text);
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.2s ease;
+}
+
+.slotify-toggle::before {
+  top: 14px;
+}
+
+.slotify-toggle::after {
+  bottom: 14px;
+}
+
+.slotify-topbar-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 18px;
+}
+
+.slotify-topbar-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  color: var(--slotify-text);
+}
+
+.slotify-topbar-subtitle {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slotify-muted);
+}
+
+.slotify-top-actions .btn {
+  white-space: nowrap;
+}
+
+.slotify-content {
+  padding: 0 36px 48px;
+}
+
+.slotify-alert-stack {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.slotify-alert {
+  border-radius: var(--slotify-radius-md);
+  border: 1px solid rgba(77, 163, 255, 0.3);
+  background: rgba(16, 27, 58, 0.75);
+  color: var(--slotify-text);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.slotify-alert.alert-success {
+  border-color: rgba(72, 249, 166, 0.45);
+}
+
+.slotify-alert.alert-danger {
+  border-color: rgba(255, 94, 94, 0.45);
+}
+
+main a {
+  color: var(--slotify-azure);
+}
+
+main a:hover {
+  color: #84c3ff;
+}
+
+.card {
+  background: var(--slotify-glass);
+  border: 1px solid var(--slotify-border);
+  border-radius: var(--slotify-radius-lg);
+  box-shadow: var(--slotify-shadow-sm);
+  color: var(--slotify-text);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.card.h-100 {
+  height: 100%;
+}
+
+.card-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: var(--slotify-text);
+}
+
+.card-subtitle,
+.card-text,
+.list-group-item {
+  color: var(--slotify-muted);
+  background-color: transparent;
+}
+
+.list-group-item {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.btn-primary {
+  background-image: var(--slotify-gradient);
+  border: none;
+  color: var(--slotify-night);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 16px;
+  box-shadow: 0 12px 20px rgba(77, 163, 255, 0.2);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 28px rgba(77, 163, 255, 0.35);
+}
+
+.btn-outline-secondary,
+.btn-secondary {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: var(--slotify-text);
+}
+
+.btn-outline-secondary:hover,
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--slotify-text);
+}
+
+.form-control,
+.form-select,
+textarea.form-control {
+  background: rgba(6, 12, 30, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  color: var(--slotify-text);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: rgba(77, 163, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(77, 163, 255, 0.25);
+}
+
+.table {
+  color: var(--slotify-text);
+}
+
+.table thead {
+  color: var(--slotify-muted);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.badge.bg-success {
+  background: rgba(72, 249, 166, 0.2) !important;
+  color: var(--slotify-text);
+}
+
+.badge.bg-warning {
+  background: rgba(255, 184, 77, 0.2) !important;
+  color: var(--slotify-text);
+}
+
+.slotify-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 48px;
+  display: grid;
+  gap: 28px;
+  background: linear-gradient(130deg, rgba(16, 27, 58, 0.92), rgba(8, 15, 32, 0.92));
+}
+
+.slotify-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 20%, rgba(77, 163, 255, 0.45), transparent 55%),
+    radial-gradient(circle at 20% 80%, rgba(72, 249, 166, 0.4), transparent 60%);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.slotify-hero > * {
+  z-index: 1;
+}
+
+.slotify-eyebrow {
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.slotify-hero-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 3vw + 1rem, 2.8rem);
+  margin-bottom: 12px;
+  color: var(--slotify-text);
+}
+
+.slotify-hero-copy {
+  max-width: 520px;
+  color: var(--slotify-muted);
+  font-size: 1rem;
+}
+
+.slotify-hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.slotify-hero-visual {
+  position: relative;
+  min-height: 220px;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(12, 21, 46, 0.55);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--slotify-shadow-sm);
+}
+
+.slotify-hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+  border-radius: inherit;
+}
+
+.slotify-hero-pulse {
+  position: absolute;
+  inset: 20px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(77, 163, 255, 0.35), rgba(72, 249, 166, 0.35));
+  filter: blur(18px);
+}
+
+.slotify-stats-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.slotify-stat-card {
+  padding: 24px;
+  border-radius: var(--slotify-radius-lg);
+  background: rgba(16, 27, 58, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--slotify-shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.slotify-stat-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(77, 163, 255, 0.15), transparent 60%);
+}
+
+.slotify-stat-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.slotify-stat-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--slotify-muted);
+  margin-bottom: 10px;
+}
+
+.slotify-stat-value {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--slotify-text);
+}
+
+.slotify-stat-meta {
+  font-size: 0.95rem;
+  color: rgba(72, 249, 166, 0.9);
+}
+
+.slotify-list {
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.slotify-list-item {
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(6, 12, 30, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.slotify-step-card {
+  background: rgba(6, 12, 30, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--slotify-radius-md);
+  padding: 20px 22px;
+  color: var(--slotify-muted);
+}
+
+.slotify-step-card h3 {
+  color: var(--slotify-muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  margin-bottom: 8px;
+}
+
+.slotify-step-card p {
+  margin: 0;
+  color: var(--slotify-text);
+  font-size: 0.95rem;
+}
+
+.slotify-auth-card {
+  background: rgba(16, 27, 58, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--slotify-shadow-sm);
+}
+
+.slotify-auth-card .card-body {
+  padding: 40px 36px;
+}
+
+.slotify-auth-card .text-muted {
+  color: var(--slotify-muted) !important;
+}
+
+.slotify-auth-side {
+  background: linear-gradient(135deg, rgba(77, 163, 255, 0.25), rgba(72, 249, 166, 0.2));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: stretch;
+}
+
+.slotify-auth-side-inner {
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: var(--slotify-text);
+}
+
+.slotify-auth-side-inner h2 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+.slotify-auth-side-inner ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.slotify-auth-side-inner li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.slotify-auth-side-inner li::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--slotify-azure);
+  box-shadow: 0 0 12px rgba(77, 163, 255, 0.6);
+}
+
+.slot-capacity-wrapper {
+  position: relative;
+  height: 18px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.slot-capacity-bar {
+  height: 100%;
+  background: var(--slotify-gradient);
+  width: var(--capacity, 0%);
+  transition: width 0.35s ease;
+}
+
+.slot-capacity-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--slotify-night);
+}
+
+footer.slotify-footer {
+  margin-top: 40px;
+  padding: 20px 0;
+  color: var(--slotify-muted);
+  text-align: center;
+}
+
+.slotify-table {
+  --slotify-row-bg: rgba(255, 255, 255, 0.02);
+  --slotify-row-border: rgba(255, 255, 255, 0.06);
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--slotify-text);
+}
+
+.slotify-table thead {
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--slotify-muted);
+}
+
+.slotify-table th,
+.slotify-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--slotify-row-border);
+}
+
+.slotify-table tbody tr:hover {
+  background: rgba(77, 163, 255, 0.08);
+}
+
+.slotify-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--slotify-text);
+  background: rgba(77, 163, 255, 0.25);
+}
+
+.slotify-pill.success {
+  background: rgba(72, 249, 166, 0.25);
+}
+
+.slotify-pill.warning {
+  background: rgba(255, 184, 77, 0.25);
+  color: #ffdca6;
+}
+
+.slotify-pill.danger {
+  background: rgba(255, 94, 94, 0.25);
+}
+
+.slotify-directory {
+  display: grid;
+  gap: 16px;
+}
+
+.slotify-directory-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 22px;
+  border-radius: var(--slotify-radius-lg);
+  background: rgba(6, 12, 30, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.slotify-directory-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(77, 163, 255, 0.35);
+}
+
+.slotify-directory-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slotify-directory-name {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--slotify-text);
+}
+
+.slotify-directory-dept {
+  font-size: 0.85rem;
+  color: var(--slotify-muted);
+}
+
+@media (max-width: 1100px) {
+  .slotify-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    transform: translateX(0);
+    z-index: 10;
+    transition: transform 0.3s ease;
+  }
+
+  body.slotify-sidebar-collapsed .slotify-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .slotify-main {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .slotify-sidebar {
+    width: 240px;
+    padding: 24px 20px;
+  }
+
+  .slotify-topbar {
+    padding: 20px 20px 12px;
+    gap: 16px;
+  }
+
+  .slotify-top-actions {
+    display: none;
+  }
+
+  .slotify-content {
+    padding: 0 20px 36px;
+  }
+
+  .slotify-hero {
+    padding: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

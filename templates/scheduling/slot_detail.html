@@ -1,54 +1,88 @@
 {% extends "base.html" %}
 {% load humanize %}
+
+{% block page_title %}Slot Detail{% endblock %}
+
 {% block content %}
-<h2>Slot Detail</h2>
-<div class="card mb-3">
-  <div class="card-body">
-    <h5 class="card-title">{{ slot.start_time|date:"M d, Y g:i A" }} - {{ slot.end_time|date:"g:i A" }}</h5>
-    <p><strong>Location:</strong> {{ slot.location }}</p>
-    <p><strong>Status:</strong> <span class="badge bg-info">{{ slot.status }}</span></p>
-    {% if slot.max_students > 0 %}
-      {% with booked=slot.booked_count %}
-        <p><strong>Capacity:</strong> {{ booked }} / {{ slot.max_students }}</p>
-        {% widthratio booked slot.max_students 100 as capacity_pct %}
-        <div class="slot-capacity-wrapper mb-3">
-          <div class="progress">
-            {% if capacity_pct >= 100 %}
-              <div class="progress-bar slot-capacity-bar bg-danger" style="--capacity: {{ capacity_pct }}%;"></div>
-            {% elif capacity_pct >= 70 %}
-              <div class="progress-bar slot-capacity-bar bg-warning text-dark" style="--capacity: {{ capacity_pct }}%;"></div>
+<section class="row g-4">
+  <div class="col-xl-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h1 class="card-title h4 mb-3">{{ slot.start_time|date:"M d, Y g:i A" }} <span class="text-muted">– {{ slot.end_time|date:"g:i A" }}</span></h1>
+        <div class="d-grid gap-3">
+          <div>
+            <span class="slotify-pill">Location</span>
+            <p class="mb-0 mt-2">{{ slot.location }}</p>
+          </div>
+          <div>
+            <span class="slotify-pill">Status</span>
+            <p class="mb-0 mt-2">
+              {% if slot.status == 'AVAILABLE' %}
+                <span class="slotify-pill success">{{ slot.status }}</span>
+              {% elif slot.status == 'BLOCKED' %}
+                <span class="slotify-pill warning">{{ slot.status }}</span>
+              {% elif slot.status == 'CANCELLED' %}
+                <span class="slotify-pill danger">{{ slot.status }}</span>
+              {% else %}
+                <span class="slotify-pill">{{ slot.status }}</span>
+              {% endif %}
+            </p>
+          </div>
+          <div>
+            <span class="slotify-pill">Capacity</span>
+            {% if slot.max_students > 0 %}
+              {% with booked=slot.booked_count %}
+                {% widthratio booked slot.max_students 100 as capacity_pct %}
+                <div class="slot-capacity-wrapper mt-2" data-capacity="{{ capacity_pct }}">
+                  <div class="slot-capacity-bar"></div>
+                  <div class="slot-capacity-label">{{ booked }} / {{ slot.max_students }}</div>
+                </div>
+              {% endwith %}
             {% else %}
-              <div class="progress-bar slot-capacity-bar bg-success" style="--capacity: {{ capacity_pct }}%;"></div>
+              <p class="mt-2 mb-0 text-muted">Not configured</p>
             {% endif %}
           </div>
-          <div class="slot-capacity-label position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
-            {{ booked }} / {{ slot.max_students }}
+          <div>
+            <span class="slotify-pill">Relative start</span>
+            <p class="mt-2 mb-0">{{ slot.start_time|naturaltime }}</p>
           </div>
         </div>
-      {% endwith %}
-    {% else %}
-      <p><strong>Capacity:</strong> Not configured</p>
-    {% endif %}
-    <p><strong>Relative start:</strong> {{ slot.start_time|naturaltime }}</p>
+      </div>
+    </div>
   </div>
-</div>
-
-<h5>Bookings</h5>
-<table class="table table-sm">
-  <thead>
-    <tr><th>Student</th><th>Status</th><th>Booked At</th></tr>
-  </thead>
-  <tbody>
-    {% for b in bookings %}
-      <tr>
-        <td>{{ b.student.username }}</td>
-        <td>{{ b.status }}</td>
-        <td>{{ b.created_at|date:"M d, Y g:i A" }}</td>
-      </tr>
-    {% empty %}
-      <tr><td colspan="3" class="text-muted">No bookings yet.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
-<a href="{% url 'faculty_slots_list' %}" class="btn btn-secondary">Back</a>
+  <div class="col-xl-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="card-title h4 mb-0">Bookings</h2>
+          <a href="{% url 'faculty_slots_list' %}" class="btn btn-outline-secondary btn-sm">Back to slots</a>
+        </div>
+        {% if bookings %}
+          <div class="table-responsive">
+            <table class="slotify-table align-middle">
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Status</th>
+                  <th>Booked at</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for b in bookings %}
+                  <tr>
+                    <td>{{ b.student.username }}</td>
+                    <td>{{ b.status }}</td>
+                    <td>{{ b.created_at|date:"M d, Y g:i A" }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No students have booked this slot yet.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}

@@ -1,40 +1,67 @@
 {% extends "base.html" %}
-{% block content %}
-<h2>Student Dashboard</h2>
-<p>Welcome, <strong>{{ user.username }}</strong>!</p>
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="card mb-3">
+{% block page_title %}Student HQ{% endblock %}
+
+{% block content %}
+<section class="slotify-stats-grid mb-4">
+  <article class="slotify-stat-card">
+    <div class="slotify-stat-label">Upcoming visits</div>
+    <div class="slotify-stat-value">{{ upcoming_bookings|length }}</div>
+    <p class="slotify-stat-meta">
+      {% if upcoming_bookings %}
+        Next with {{ upcoming_bookings.0.slot.faculty.username }} on {{ upcoming_bookings.0.slot.start_time|date:"M d, g:i A" }}.
+      {% else %}
+        Book your next mentoring moment in a couple of taps.
+      {% endif %}
+    </p>
+  </article>
+  <article class="slotify-stat-card">
+    <div class="slotify-stat-label">Focus mode</div>
+    <div class="slotify-stat-value">Stay organized</div>
+    <p class="slotify-stat-meta">Sync sessions, track confirmations, and arrive prepared every time.</p>
+  </article>
+</section>
+
+<div class="row g-4">
+  <div class="col-xl-7">
+    <div class="card slotify-list-card h-100">
       <div class="card-body">
-        <h5 class="card-title">📅 Upcoming Bookings</h5>
+        <h2 class="card-title h4 mb-3">📅 Upcoming Bookings</h2>
         {% if upcoming_bookings %}
-          <ul class="list-group list-group-flush">
+          <div class="slotify-list">
             {% for booking in upcoming_bookings %}
-              <li class="list-group-item">
-                <strong>{{ booking.slot.faculty.username }}</strong><br>
-                {{ booking.slot.start_time|date:"M d, Y g:i A" }} - {{ booking.slot.end_time|date:"g:i A" }}<br>
-                <small class="text-muted">📍 {{ booking.slot.location }}</small>
-              </li>
+              <div class="slotify-list-item">
+                <div class="d-flex justify-content-between flex-wrap gap-2">
+                  <div>
+                    <strong>{{ booking.slot.faculty.username }}</strong>
+                    <div class="small text-muted">{{ booking.slot.location }}</div>
+                  </div>
+                  <div class="text-end">
+                    <div>{{ booking.slot.start_time|date:"M d, Y" }}</div>
+                    <div class="small text-muted">{{ booking.slot.start_time|date:"g:i A" }} – {{ booking.slot.end_time|date:"g:i A" }}</div>
+                  </div>
+                </div>
+              </div>
             {% endfor %}
-          </ul>
-          <a href="{% url 'student_bookings_list' %}" class="btn btn-sm btn-secondary mt-2">View All Bookings</a>
+          </div>
+          <a href="{% url 'student_bookings_list' %}" class="btn btn-outline-secondary mt-3">View all bookings</a>
         {% else %}
-          <p class="text-muted text-center py-3">
-            No upcoming bookings.<br>
-            <a href="{% url 'faculty_list' %}" class="btn btn-sm btn-outline-primary mt-2">Browse Faculty to Book</a>
-          </p>
+          <p class="text-muted mb-0">No upcoming bookings yet. Discover a faculty mentor to jump-start your progress.</p>
+          <a href="{% url 'faculty_list' %}" class="btn btn-primary mt-3">Browse faculty now</a>
         {% endif %}
       </div>
     </div>
   </div>
-
-  <div class="col-md-6">
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">⚡ Quick Actions</h5>
-        <a href="{% url 'faculty_list' %}" class="btn btn-primary btn-block mb-2 w-100">Browse Faculty</a>
-        <a href="{% url 'student_bookings_list' %}" class="btn btn-outline-secondary btn-block w-100">My Bookings</a>
+  <div class="col-xl-5">
+    <div class="card h-100">
+      <div class="card-body d-grid gap-3">
+        <h2 class="card-title h4 mb-1">⚡ Quick Actions</h2>
+        <a href="{% url 'faculty_list' %}" class="btn btn-primary w-100">Book a new slot</a>
+        <a href="{% url 'student_bookings_list' %}" class="btn btn-outline-secondary w-100">Manage my bookings</a>
+        <div class="slotify-step-card mt-2">
+          <h3>Stay prepared</h3>
+          <p>Bring talking points and any files you need. Faculty can add notes once your slot is confirmed.</p>
+        </div>
       </div>
     </div>
   </div>

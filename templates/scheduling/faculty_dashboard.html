@@ -1,61 +1,86 @@
 {% extends "base.html" %}
 
+{% block page_title %}Faculty HQ{% endblock %}
+
 {% block content %}
+<section class="slotify-stats-grid mb-4">
+  <article class="slotify-stat-card">
+    <div class="slotify-stat-label">Upcoming slots</div>
+    <div class="slotify-stat-value">{{ next_slots|length }}</div>
+    <p class="slotify-stat-meta">
+      {% if next_slots %}
+        Next session starts {{ next_slots.0.start_time|date:"M d, g:i A" }}.
+      {% else %}
+        Launch your next office-hour window in under a minute.
+      {% endif %}
+    </p>
+  </article>
+  <article class="slotify-stat-card">
+    <div class="slotify-stat-label">Engagement</div>
+    <div class="slotify-stat-value">Stay proactive</div>
+    <p class="slotify-stat-meta">Monitor capacity, share materials, and keep students aligned before meetups.</p>
+  </article>
+</section>
 
-
-
-<h2>Faculty Dashboard</h2>
-<p>Welcome, <strong>{{ user.username }}</strong>!</p>
-
-<div class="row">
-  <div class="col-md-8">
-    <div class="card mb-3">
+<div class="row g-4">
+  <div class="col-xl-7">
+    <div class="card h-100">
       <div class="card-body">
-        <h5 class="card-title">📅 Upcoming Slots</h5>
+        <h2 class="card-title h4 mb-3">📅 Upcoming Slots</h2>
         {% if next_slots %}
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th>Date & Time</th>
-                <th>Location</th>
-                <th>Bookings</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for slot in next_slots %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
                 <tr>
-                  <td>{{ slot.start_time|date:"M d, Y g:i A" }}</td>
-                  <td>{{ slot.location }}</td>
-                  <td>{{ slot.booked_count }} / {{ slot.max_students }}</td>
-                  <td>
-                    {% if slot.status == 'AVAILABLE' %}
-                      <span class="badge bg-success">{{ slot.status }}</span>
-                    {% else %}
-                      <span class="badge bg-secondary">{{ slot.status }}</span>
-                    {% endif %}
-                  </td>
+                  <th>Date &amp; time</th>
+                  <th>Location</th>
+                  <th>Bookings</th>
+                  <th>Status</th>
                 </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-          <a href="{% url 'faculty_slots_list' %}" class="btn btn-sm btn-secondary">View All Slots</a>
+              </thead>
+              <tbody>
+                {% for slot in next_slots %}
+                  <tr>
+                    <td>
+                      <strong>{{ slot.start_time|date:"M d, Y" }}</strong>
+                      <div class="small text-muted">{{ slot.start_time|date:"g:i A" }} – {{ slot.end_time|date:"g:i A" }}</div>
+                    </td>
+                    <td>{{ slot.location }}</td>
+                    <td>
+                      {% widthratio slot.booked_count slot.max_students 100 as capacity_percent %}
+                      <div class="slot-capacity-wrapper" data-capacity="{{ capacity_percent }}">
+                        <div class="slot-capacity-bar"></div>
+                        <div class="slot-capacity-label">{{ slot.booked_count }} / {{ slot.max_students }}</div>
+                      </div>
+                    </td>
+                    <td>
+                      {% if slot.status == 'AVAILABLE' %}
+                        <span class="badge bg-success">{{ slot.status }}</span>
+                      {% else %}
+                        <span class="badge bg-secondary">{{ slot.status }}</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <a href="{% url 'faculty_slots_list' %}" class="btn btn-outline-secondary mt-3">View all slots</a>
         {% else %}
-          <p class="text-muted text-center py-3">
-            No upcoming slots created yet.<br>
-            <a href="{% url 'faculty_slot_create' %}" class="btn btn-sm btn-outline-success mt-2">Create Your First Slot</a>
-          </p>
+          <p class="text-muted mb-0">You have not created upcoming slots. Start with your next availability window.</p>
+          <a href="{% url 'faculty_slot_create' %}" class="btn btn-primary mt-3">Create your first slot</a>
         {% endif %}
       </div>
     </div>
   </div>
-
-  <div class="col-md-4">
-    <div class="card mb-3">
-      <div class="card-body">
-        <h5 class="card-title">⚡ Quick Actions</h5>
-        <a href="{% url 'faculty_slot_create' %}" class="btn btn-primary btn-block mb-2 w-100">Create New Slot</a>
-        <a href="{% url 'faculty_slots_list' %}" class="btn btn-outline-secondary btn-block w-100">Manage Slots</a>
+  <div class="col-xl-5">
+    <div class="card h-100 d-grid gap-3 p-4">
+      <h2 class="card-title h4 mb-0">⚡ Quick Actions</h2>
+      <a href="{% url 'faculty_slot_create' %}" class="btn btn-primary w-100">Launch a new slot</a>
+      <a href="{% url 'faculty_slots_list' %}" class="btn btn-outline-secondary w-100">Manage my roster</a>
+      <div class="slotify-step-card">
+        <h3>Boost attendance</h3>
+        <p>Share agenda notes and prep work inside bookings so students arrive focused and ready.</p>
       </div>
     </div>
   </div>

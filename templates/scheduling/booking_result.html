@@ -1,11 +1,21 @@
 {% extends "base.html" %}
+
+{% block page_title %}Booking Status{% endblock %}
+
 {% block content %}
-<h2>Booking Result</h2>
-{% if error %}
-  <div class="alert alert-danger">{{ error }}</div>
-{% endif %}
-{% if success %}
-  <div class="alert alert-success">{{ success }}</div>
-{% endif %}
-<p><a href="/" class="btn btn-secondary">Home</a></p>
+<section class="card">
+  <div class="card-body">
+    <h1 class="card-title h4 mb-3">Your booking update</h1>
+    {% if error %}
+      <div class="alert alert-danger slotify-alert">{{ error }}</div>
+    {% endif %}
+    {% if success %}
+      <div class="alert alert-success slotify-alert">{{ success }}</div>
+    {% endif %}
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <a href="{% url 'student_dashboard' %}" class="btn btn-primary">Back to dashboard</a>
+      <a href="{% url 'faculty_list' %}" class="btn btn-outline-secondary">Browse more faculty</a>
+    </div>
+  </div>
+</section>
 {% endblock %}

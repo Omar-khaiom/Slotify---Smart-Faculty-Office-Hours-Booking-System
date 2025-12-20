@@ -1,61 +1,80 @@
 {% extends "base.html" %}
 {% load humanize %}
+
+{% block page_title %}My Slots{% endblock %}
+
 {% block content %}
-<h2>Your Slots</h2>
-<p><a href="{% url 'faculty_slot_create' %}" class="btn btn-sm btn-primary">Create New Slot</a></p>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Start</th><th>End</th><th>Location</th><th>Bookings</th><th>Status</th><th>Details</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for slot in slots %}
-    <tr>
-      <td>{{ slot.start_time|date:"M d, Y g:i A" }} <br><small class="text-muted">({{ slot.start_time|naturaltime }})</small></td>
-      <td>{{ slot.end_time|date:"g:i A" }}</td>
-      <td>{{ slot.location }}</td>
-      <td style="width:220px;">
-        {% if slot.max_students > 0 %}
-          {% with booked=slot.booked_count %}
-            {% widthratio booked slot.max_students 100 as capacity_pct %}
-            <div class="slot-capacity-wrapper">
-              <div class="progress">
-                {% if capacity_pct >= 100 %}
-                  <div class="progress-bar slot-capacity-bar bg-danger" style="--capacity: {{ capacity_pct }}%;"></div>
-                {% elif capacity_pct >= 70 %}
-                  <div class="progress-bar slot-capacity-bar bg-warning text-dark" style="--capacity: {{ capacity_pct }}%;"></div>
-                {% else %}
-                  <div class="progress-bar slot-capacity-bar bg-success" style="--capacity: {{ capacity_pct }}%;"></div>
-                {% endif %}
-              </div>
-              <div class="slot-capacity-label position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
-                {{ booked }} / {{ slot.max_students }}
-              </div>
-            </div>
-          {% endwith %}
-        {% else %}
-          <span class="text-muted">No capacity set</span>
-        {% endif %}
-      </td>
-      <td>
-        {% if slot.status == 'AVAILABLE' %}
-          <span class="badge bg-success">{{ slot.status }}</span>
-        {% elif slot.status == 'BLOCKED' %}
-          <span class="badge bg-warning">{{ slot.status }}</span>
-        {% elif slot.status == 'CANCELLED' %}
-          <span class="badge bg-danger">{{ slot.status }}</span>
-        {% elif slot.status == 'PAST' %}
-          <span class="badge bg-secondary">{{ slot.status }}</span>
-        {% else %}
-          <span class="badge bg-info">{{ slot.status }}</span>
-        {% endif %}
-      </td>
-      <td><a href="{% url 'faculty_slot_detail' slot.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="5" class="text-center text-muted">No slots created yet. Click "Create New Slot" to get started!</td></tr>
-  {% endfor %}
-  </tbody>
-</table>
+<section class="card">
+  <div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+      <div>
+        <h1 class="card-title h4 mb-1">Manage your upcoming availability</h1>
+        <p class="text-muted mb-0">Track commitments, monitor capacity, and drill into booking details with one glance.</p>
+      </div>
+      <a href="{% url 'faculty_slot_create' %}" class="btn btn-primary">Create new slot</a>
+    </div>
+
+    {% if slots %}
+      <div class="table-responsive">
+        <table class="slotify-table align-middle">
+          <thead>
+            <tr>
+              <th>Start</th>
+              <th>End</th>
+              <th>Location</th>
+              <th>Capacity</th>
+              <th>Status</th>
+              <th class="text-end">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for slot in slots %}
+              {% with booked=slot.booked_count %}
+                <tr>
+                  <td>
+                    <strong>{{ slot.start_time|date:"M d, Y g:i A" }}</strong>
+                    <div class="small text-muted">{{ slot.start_time|naturaltime }}</div>
+                  </td>
+                  <td>{{ slot.end_time|date:"g:i A" }}</td>
+                  <td>{{ slot.location }}</td>
+                  <td>
+                    {% if slot.max_students > 0 %}
+                      {% widthratio booked slot.max_students 100 as capacity_pct %}
+                      <div class="slot-capacity-wrapper" data-capacity="{{ capacity_pct }}">
+                        <div class="slot-capacity-bar"></div>
+                        <div class="slot-capacity-label">{{ booked }} / {{ slot.max_students }}</div>
+                      </div>
+                    {% else %}
+                      <span class="slotify-pill">No capacity</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if slot.status == 'AVAILABLE' %}
+                      <span class="slotify-pill success">{{ slot.status }}</span>
+                    {% elif slot.status == 'BLOCKED' %}
+                      <span class="slotify-pill warning">{{ slot.status }}</span>
+                    {% elif slot.status == 'CANCELLED' %}
+                      <span class="slotify-pill danger">{{ slot.status }}</span>
+                    {% elif slot.status == 'PAST' %}
+                      <span class="slotify-pill">{{ slot.status }}</span>
+                    {% else %}
+                      <span class="slotify-pill">{{ slot.status }}</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-end"><a href="{% url 'faculty_slot_detail' slot.id %}" class="btn btn-outline-secondary btn-sm">View</a></td>
+                </tr>
+              {% endwith %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="slotify-step-card">
+        <h3>No slots yet</h3>
+        <p>Launch a new window of availability so students can connect with you.</p>
+        <a href="{% url 'faculty_slot_create' %}" class="btn btn-primary mt-3 align-self-start">Create slot</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
 {% endblock %}

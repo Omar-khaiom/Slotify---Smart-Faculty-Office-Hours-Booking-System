@@ -1,21 +1,43 @@
 {% extends "base.html" %}
+
+{% block page_title %}Sign In{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-4">
-    <h2 class="mb-3">Login</h2>
-    <form method="post" class="card card-body shadow-sm">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
-      <div class="mb-3">
-        <label class="form-label">Username</label>
-        {{ form.username }}
+<div class="row justify-content-center align-items-center g-4">
+  <div class="col-lg-5">
+    <div class="card slotify-auth-card">
+      <div class="card-body">
+        <div class="slotify-eyebrow mb-2">Welcome back</div>
+        <h1 class="card-title h3 mb-3">Sign in to your Slotify space</h1>
+        <p class="text-muted mb-4">Access the dashboards crafted for your role and keep office hours running smoothly.</p>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            {{ form.username }}
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Password</label>
+            {{ form.password }}
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Sign In</button>
+        </form>
       </div>
-      <div class="mb-3">
-        <label class="form-label">Password</label>
-        {{ form.password }}
+    </div>
+  </div>
+  <div class="col-lg-5 d-none d-lg-block">
+    <div class="slotify-auth-side card border-0 h-100">
+      <div class="slotify-auth-side-inner">
+        <h2>One portal. Every role.</h2>
+        <p>Students coordinate visits, faculty orchestrate agendas, and admins watch the pulse of campus engagement.</p>
+        <ul>
+          <li>Secure Django authentication with custom roles.</li>
+          <li>Capacity-aware scheduling to prevent double bookings.</li>
+          <li>Live analytics for usage and peak time discovery.</li>
+        </ul>
       </div>
-      <button type="submit" class="btn btn-primary w-100">Login</button>
-    </form>
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -1,44 +1,60 @@
+document.getElementById('facultySearch').addEventListener('keyup', function() {
 {% extends "base.html" %}
+
+{% block page_title %}Faculty Directory{% endblock %}
+
 {% block content %}
-<h2>Faculty Directory</h2>
-<p>Select a faculty member to view and book their available office hour slots.</p>
+<section class="card mb-4">
+  <div class="card-body">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+      <div>
+        <h1 class="card-title h4 mb-1">Explore mentors across campus</h1>
+        <p class="text-muted mb-0">Filter by name or department, then jump straight into available slots.</p>
+      </div>
+      <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary">Back to dashboard</a>
+    </div>
+    <input type="text" id="facultySearch" class="form-control" placeholder="Search by name or department..." aria-label="Search faculty" />
+  </div>
+</section>
 
-<div class="mb-3">
-  <input type="text" id="facultySearch" class="form-control" placeholder="Search by name or department...">
-</div>
-
-<table class="table table-striped" id="facultyTable">
-  <thead>
-    <tr><th>Name</th><th>Department</th><th>Action</th></tr>
-  </thead>
-  <tbody>
+{% if faculties %}
+  <div class="slotify-directory" id="facultyDirectory">
     {% for f in faculties %}
-      <tr>
-        <td>{{ f.username }}</td>
-        <td>{{ f.department|default:'-' }}</td>
-        <td><a class="btn btn-sm btn-primary" href="{% url 'faculty_public_slots' f.id %}">View Slots</a></td>
-      </tr>
-    {% empty %}
-      <tr><td colspan="3" class="text-center text-muted">No faculty users yet.</td></tr>
+      <article class="slotify-directory-card" data-name="{{ f.username|lower }}" data-dept="{{ f.department|default:''|lower }}">
+        <div class="slotify-directory-meta">
+          <span class="slotify-directory-name">{{ f.username }}</span>
+          <span class="slotify-directory-dept">{{ f.department|default:'Department pending' }}</span>
+        </div>
+        <a class="btn btn-primary" href="{% url 'faculty_public_slots' f.id %}">View slots</a>
+      </article>
     {% endfor %}
-  </tbody>
-</table>
+  </div>
+{% else %}
+  <div class="slotify-step-card">
+    <h3>No faculty found</h3>
+    <p>Ask your administrator to create faculty accounts so you can start booking sessions.</p>
+  </div>
+{% endif %}
 
 <script>
-document.getElementById('facultySearch').addEventListener('keyup', function() {
-  const filter = this.value.toLowerCase();
-  const rows = document.querySelectorAll('#facultyTable tbody tr');
-  
-  rows.forEach(row => {
-    const name = row.cells[0]?.textContent.toLowerCase() || '';
-    const dept = row.cells[1]?.textContent.toLowerCase() || '';
-    
-    if (name.includes(filter) || dept.includes(filter)) {
-      row.style.display = '';
-    } else {
-      row.style.display = 'none';
-    }
+(function () {
+  const searchInput = document.getElementById("facultySearch");
+  if (!searchInput) {
+    return;
+  }
+  const cards = document.querySelectorAll("#facultyDirectory .slotify-directory-card");
+  searchInput.addEventListener("input", function () {
+    const filter = this.value.trim().toLowerCase();
+    cards.forEach(function (card) {
+      var name = card.getAttribute("data-name") || "";
+      var dept = card.getAttribute("data-dept") || "";
+      if (!filter || name.includes(filter) || dept.includes(filter)) {
+        card.style.display = "flex";
+      } else {
+        card.style.display = "none";
+      }
+    });
   });
-});
+})();
 </script>
 {% endblock %}

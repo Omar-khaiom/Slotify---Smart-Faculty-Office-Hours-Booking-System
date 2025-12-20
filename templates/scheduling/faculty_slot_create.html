@@ -1,36 +1,58 @@
 {% extends "base.html" %}
+
+{% block page_title %}Create Slot{% endblock %}
+
 {% block content %}
-<h2>Create New Slot</h2>
-<div class="row">
-  <div class="col-md-6">
-    <form method="post" class="card card-body">
-      {% csrf_token %}
-      {{ form.non_field_errors }}
-      <div class="mb-3">
-        <label class="form-label">Start Time</label>
-        {{ form.start_time }}
-        <small class="form-text text-muted">Format: YYYY-MM-DD HH:MM (e.g., 2025-11-15 14:00)</small>
-        {{ form.start_time.errors }}
+<section class="row g-4">
+  <div class="col-xl-6">
+    <form method="post" class="card slotify-auth-card">
+      <div class="card-body">
+        <div class="slotify-eyebrow mb-2">New availability</div>
+        <h1 class="card-title h4 mb-3">Launch a fresh office-hour slot</h1>
+        <p class="text-muted mb-4">Students will see this window instantly in their dashboards once you save.</p>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="mb-3">
+          <label class="form-label">Start time</label>
+          {{ form.start_time }}
+          <small class="form-text text-muted">Format: YYYY-MM-DD HH:MM (e.g., 2025-11-15 14:00)</small>
+          {{ form.start_time.errors }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">End time</label>
+          {{ form.end_time }}
+          <small class="form-text text-muted">Format: YYYY-MM-DD HH:MM (e.g., 2025-11-15 15:00)</small>
+          {{ form.end_time.errors }}
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Location</label>
+          {{ form.location }}
+          {{ form.location.errors }}
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Max students</label>
+          {{ form.max_students }}
+          {{ form.max_students.errors }}
+        </div>
+        <div class="d-flex gap-3">
+          <button type="submit" class="btn btn-primary">Create slot</button>
+          <a href="{% url 'faculty_slots_list' %}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
       </div>
-      <div class="mb-3">
-        <label class="form-label">End Time</label>
-        {{ form.end_time }}
-        <small class="form-text text-muted">Format: YYYY-MM-DD HH:MM (e.g., 2025-11-15 15:00)</small>
-        {{ form.end_time.errors }}
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Location</label>
-        {{ form.location }}
-        {{ form.location.errors }}
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Max Students</label>
-        {{ form.max_students }}
-        {{ form.max_students.errors }}
-      </div>
-      <button type="submit" class="btn btn-success">Create Slot</button>
-      <a href="{% url 'faculty_slots_list' %}" class="btn btn-secondary">Cancel</a>
     </form>
   </div>
-</div>
+  <div class="col-xl-6">
+    <div class="card slotify-auth-side h-100 border-0">
+      <div class="slotify-auth-side-inner">
+        <h2>Best practices</h2>
+        <ul>
+          <li>Use clear room names or virtual meeting links so students know where to go.</li>
+          <li>Keep slots under an hour to maximize availability and limit no-shows.</li>
+          <li>Enable buffer time by spacing start and end times appropriately.</li>
+          <li>Update the slot status to "Blocked" if you need to pause new bookings.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
