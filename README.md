@@ -1,51 +1,27 @@
 # Slotify – Smart Faculty Office Hours Booking System
 
-A Django-based web application that simplifies scheduling and managing faculty office hours for educational institutions.
+A Django-based web application for scheduling and managing faculty office hours.
 
 ## Features
 
-Slotify is a Django application that streamlines how faculty publish office-hour availability and how students reserve time. It ships with polished dashboards, capacity-aware booking, analytics, and a clean Bootstrap UI—ready for campus pilots or further customization.
+**Students** – Browse faculty, check availability, book slots with overlap protection, manage bookings.
 
-## ✨ Feature Highlights
+**Faculty** – Create office-hour slots, set capacity & location, monitor attendance, view rosters.
 
-| Audience | Capabilities |
-| --- | --- |
-| **Students** | Browse faculty directory, check capacity-aware availability, book/cancel slots with overlap protection, track upcoming visits. |
-| **Faculty** | Create slots with capacity + locations, view attendee rosters, monitor fill rates, manage bookings from dashboards. |
-| **Admins** | Review analytics (totals, peak hours, top faculty, recent activity), manage everything via Django Admin, prepare data for reporting. |
+**Admins** – Analytics dashboard, user management via Django Admin, system oversight.
 
-Additional safeguards include role-based access control, CSRF protection, booking race-condition prevention with database transactions, and clear feedback via Django's messages framework.
+Security includes role-based access control, CSRF protection, transactional booking logic, and session management.
 
-## 🧱 Architecture Overview
+## Architecture
 
-- **Framework**: Django 5 + Django templates with Bootstrap 5 styling.
-- **Apps**:
-  - `accounts` – custom `User` model with role helpers and authentication views.
-  - `scheduling` – Slot & Booking models, capacity logic, student/faculty workflows.
-  - `analytics` – aggregate queries for management dashboards.
-- **Database**: SQLite for local development; compatible with MySQL/PostgreSQL (see `requirements.txt`).
-- **Static/Templating**: Single `templates/` directory (after cleanup) plus `/static` for shared assets.
+- **Framework**: Django 5 + Bootstrap 5
+- **Apps**: `accounts` (user auth), `scheduling` (slots & bookings), `analytics` (reporting)
+- **Database**: SQLite (dev) / MySQL, PostgreSQL (production)
+- **Frontend**: Django templates with premium CSS theme
 
-```
-slotify/
-├─ accounts/      # Custom user + auth views
-├─ scheduling/    # Slots, bookings, dashboards
-├─ analytics/     # Reporting endpoints
-├─ templates/     # Base layout + feature pages
-├─ static/        # CSS/JS/media (optional)
-├─ requirements.txt
-└─ manage.py
-```
+## Quick Start
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Python 3.10+
-- pip (comes with Python)
-- PowerShell 5+ (Windows) or a shell of choice
-
-### Quickstart
+**Prerequisites**: Python 3.10+, pip, PowerShell 5+ (or bash)
 
 ```powershell
 cd "d:\Slotify – Smart Faculty Office Hours Booking System"
@@ -57,8 +33,7 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-Then visit:
-
+Visit:
 - App: http://127.0.0.1:8000/
 - Admin: http://127.0.0.1:8000/admin/
 
